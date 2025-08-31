@@ -44,7 +44,8 @@ class Grip(Flask):
     def __init__(self, source=None, auth=None, renderer=None,
                  assets=None, render_wide=None, render_inline=None, title=None,
                  autorefresh=None, quiet=None, theme='light', with_mermaid=False,
-                 grip_url=None, static_url_path=None, instance_path=None, **kwargs):
+                 case_insensitive_anchors=False, grip_url=None, static_url_path=None, 
+                 instance_path=None, **kwargs):
         # Defaults
         if source is None or isinstance(source, str_type):
             source = DirectoryReader(source)
@@ -108,6 +109,7 @@ class Grip(Flask):
         self.title = title
         self.quiet = quiet
         self.with_mermaid = with_mermaid
+        self.case_insensitive_anchors = case_insensitive_anchors
         if self.quiet:
             import logging
             log = logging.getLogger('werkzeug')
@@ -230,6 +232,7 @@ class Grip(Flask):
             wide_style=self.render_wide, style_urls=self.assets.style_urls,
             styles=self.assets.styles, autorefresh_url=autorefresh_url,
             with_mermaid=self.with_mermaid,
+            case_insensitive_anchors=self.case_insensitive_anchors,
             data_color_mode=data_color_mode, data_light_theme=data_light_theme,
             data_dark_theme=data_dark_theme)
 

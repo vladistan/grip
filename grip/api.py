@@ -14,7 +14,7 @@ def create_app(path=None, user_content=False, context=None, username=None,
                password=None, render_offline=False, render_wide=False,
                render_inline=False, api_url=None, title=None, text=None,
                autorefresh=None, quiet=None, theme='light', with_mermaid=False,
-               grip_class=None):
+               case_insensitive_anchors=False, grip_class=None):
     """
     Creates a Grip application with the specified overrides.
     """
@@ -44,14 +44,15 @@ def create_app(path=None, user_content=False, context=None, username=None,
 
     # Create the customized app with default asset manager
     return grip_class(source, auth, renderer, None, render_wide,
-                      render_inline, title, autorefresh, quiet, theme, with_mermaid)
+                      render_inline, title, autorefresh, quiet, theme, with_mermaid,
+                      case_insensitive_anchors)
 
 
 def serve(path=None, host=None, port=None, user_content=False, context=None,
           username=None, password=None, render_offline=False,
           render_wide=False, render_inline=False, api_url=None, title=None,
           autorefresh=True, browser=False, quiet=None, theme='light',
-          with_mermaid=False, grip_class=None):
+          with_mermaid=False, case_insensitive_anchors=False, grip_class=None):
     """
     Starts a server to render the specified file or directory containing
     a README.
@@ -59,7 +60,7 @@ def serve(path=None, host=None, port=None, user_content=False, context=None,
     app = create_app(path, user_content, context, username, password,
                      render_offline, render_wide, render_inline, api_url,
                      title, None, autorefresh, quiet, theme, with_mermaid,
-                     grip_class)
+                     case_insensitive_anchors, grip_class)
     app.run(host, port, open_browser=browser)
 
 

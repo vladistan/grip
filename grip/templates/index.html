@@ -80,6 +80,27 @@
     function scrollToHash() {
       if (location.hash && !document.querySelector(':target')) {
         var element = document.getElementById('user-content-' + location.hash.slice(1));
+        {%- if case_insensitive_anchors %}
+        
+        // If exact match failed, try case-insensitive search
+        if (!element) {
+          var hashTarget = location.hash.slice(1);
+          var lowerHashTarget = hashTarget.toLowerCase();
+          element = document.getElementById('user-content-' + lowerHashTarget);
+          
+          // If still not found, search through all anchors case-insensitively
+          if (!element) {
+            var anchors = document.querySelectorAll('[id^="user-content-"]');
+            for (var i = 0; i < anchors.length; i++) {
+              var anchorId = anchors[i].id.replace('user-content-', '');
+              if (anchorId.toLowerCase() === hashTarget.toLowerCase()) {
+                element = anchors[i];
+                break;
+              }
+            }
+          }
+        }
+        {%- endif %}
         if (element) {
            element.scrollIntoView();
         }
