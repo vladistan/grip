@@ -43,12 +43,13 @@ class GitHubRenderer(ReadmeRenderer):
     Renders the specified Readme using the GitHub Markdown API.
     """
     def __init__(self, user_content=None, context=None, api_url=None,
-                 raw=None):
+                 raw=None, with_mermaid=False):
         if api_url is None:
             api_url = DEFAULT_API_URL
         super(GitHubRenderer, self).__init__(user_content, context)
         self.api_url = api_url
         self.raw = raw
+        self.with_mermaid = with_mermaid
 
     def render(self, text, auth=None):
         """
@@ -81,7 +82,7 @@ class GitHubRenderer(ReadmeRenderer):
         # FUTURE: Remove this once GitHub API properly handles Unicode markdown
         r.encoding = 'utf-8'
 
-        return r.text if self.raw else patch(r.text)
+        return r.text if self.raw else patch(r.text, self.user_content, self.with_mermaid)
 
 
 class OfflineRenderer(ReadmeRenderer):

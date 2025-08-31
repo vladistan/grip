@@ -43,8 +43,8 @@ class Grip(Flask):
     """
     def __init__(self, source=None, auth=None, renderer=None,
                  assets=None, render_wide=None, render_inline=None, title=None,
-                 autorefresh=None, quiet=None, theme='light', grip_url=None,
-                 static_url_path=None, instance_path=None, **kwargs):
+                 autorefresh=None, quiet=None, theme='light', with_mermaid=False,
+                 grip_url=None, static_url_path=None, instance_path=None, **kwargs):
         # Defaults
         if source is None or isinstance(source, str_type):
             source = DirectoryReader(source)
@@ -107,6 +107,7 @@ class Grip(Flask):
         self.render_inline = render_inline
         self.title = title
         self.quiet = quiet
+        self.with_mermaid = with_mermaid
         if self.quiet:
             import logging
             log = logging.getLogger('werkzeug')
@@ -228,6 +229,7 @@ class Grip(Flask):
             user_content=self.renderer.user_content,
             wide_style=self.render_wide, style_urls=self.assets.style_urls,
             styles=self.assets.styles, autorefresh_url=autorefresh_url,
+            with_mermaid=self.with_mermaid,
             data_color_mode=data_color_mode, data_light_theme=data_light_theme,
             data_dark_theme=data_dark_theme)
 
@@ -369,7 +371,7 @@ class Grip(Flask):
 
         This is only used if renderer is set to None in the constructor.
         """
-        return GitHubRenderer(api_url=self.config['API_URL'])
+        return GitHubRenderer(api_url=self.config['API_URL'], with_mermaid=self.with_mermaid)
 
     def default_asset_manager(self):
         """

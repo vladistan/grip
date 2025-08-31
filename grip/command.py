@@ -40,6 +40,7 @@ Options:
   --quiet           Do not print to the terminal.
   --theme=<theme>   Theme to view markdown file (light mode or dark mode).
                     Valid options ("light", "dark"). Default: "light"
+  --with-mermaid    Enable Mermaid diagram rendering support.
 """
 
 from __future__ import print_function
@@ -140,7 +141,8 @@ def main(argv=None, force_utf8=True, patch_svg=True):
         serve(path, host, port, args['--user-content'], args['--context'],
               args['--user'], password, False, args['--wide'], False,
               args['--api-url'], args['--title'], not args['--norefresh'],
-              args['--browser'], args['--quiet'], theme, None)
+              args['--browser'], args['--quiet'], theme, args['--with-mermaid'],
+              None)
         return 0
     except ReadmeNotFoundError as ex:
         print('Error:', ex)

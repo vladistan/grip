@@ -33,6 +33,9 @@
 {%- endblock -%}
 
 {%- block scripts -%}
+  {%- if with_mermaid %}
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  {%- endif %}
   <script>
     function showCanonicalImages() {
       var images = document.getElementsByTagName('img');
@@ -46,6 +49,33 @@
         }
       }
     }
+
+    {%- if with_mermaid %}
+    function initializeMermaid() {
+      if (typeof mermaid !== 'undefined') {
+        mermaid.initialize({ 
+          startOnLoad: false,
+          theme: 'default',
+          securityLevel: 'loose'
+        });
+        
+        // Find all Mermaid diagram containers and render them
+        var mermaidDivs = document.querySelectorAll('div.mermaid');
+        mermaidDivs.forEach(function(div, index) {
+          var graphDefinition = div.textContent;
+          var graphId = 'mermaid-diagram-' + index;
+          
+          try {
+            mermaid.render(graphId, graphDefinition, function(svg) {
+              div.innerHTML = svg;
+            });
+          } catch (error) {
+            console.error('Mermaid rendering error:', error);
+          }
+        });
+      }
+    }
+    {%- endif %}
 
     function scrollToHash() {
       if (location.hash && !document.querySelector(':target')) {
@@ -72,6 +102,9 @@
           document.title = initialTitle;
           contentElement.innerHTML = msg.content;
           showCanonicalImages();
+          {%- if with_mermaid %}
+          initializeMermaid();
+          {%- endif %}
         }
       }
 
@@ -89,6 +122,9 @@
 
     window.onload = function() {
       scrollToHash();
+      {%- if with_mermaid %}
+      initializeMermaid();
+      {%- endif %}
     }
 
     showCanonicalImages();
